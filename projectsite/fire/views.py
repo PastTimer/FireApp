@@ -2,6 +2,13 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from fire.models import Locations, Incident
 
+from django.db import connection
+from django.http import JsonResponse
+from django.db.models.functions import ExtractMonth
+
+from django.db.models import Count
+from datetime import datetime
+
 
 class HomePageView(ListView):
     model = Locations
@@ -17,3 +24,26 @@ class ChartView(ListView):
     
     def get_queryset(self, *args, **kwargs):
         pass
+    
+def LineCountbyMonth(request):
+    
+    current_year = datetime,now() .year
+    
+    result = {month: 0 for month in range(1, 13)}
+    
+    incidents_per_month = Icident.objects.filter(date_time__year=current_year) \
+        .values_list('date_time', flatTrue)
+        
+    for date in incidents_per_month:
+        month = date.month
+        result[month] += 1
+    
+    month_names = {
+        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+    }
+    
+    result_with_month_names = {
+        month_names[int(month)]: count for month, count in result.items()
+    }
+    
+    return JsonResponse(result_with_month_names)
