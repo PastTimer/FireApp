@@ -25,6 +25,24 @@ class ChartView(ListView):
     def get_queryset(self, *args, **kwargs):
         pass
     
+def PieCountbySeverity(request):
+    query = '''
+    SELECT severity_level, COUNT(*) as count
+    FROM fire_incident
+    GROUP BY severity_level
+    '''
+    data = {}
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+    
+    if rows:
+        data = {severity: count for severity, count in rows}
+    else:
+        data = {}
+
+    return JsonResponse(data)
+
 def LineCountbyMonth(request):
     
     current_year = datetime,now() .year
