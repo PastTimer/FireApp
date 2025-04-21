@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
-from fire.models import Locations, Incident, FireStation
+from fire.models import Locations, Incident, FireStation, Incident
 
 from django.db import connection
 from django.http import JsonResponse
@@ -176,3 +176,19 @@ def map_station(request):
          'fireStations': fireStations_list,
      }
      return render(request, 'map_station.html', context)
+ 
+def map_incident(request):
+    incidents = Incident.objects.select_related('location').values(
+        'location__latitude', 'location__longitude', 'severity_level', 'description')
+
+    incident_data = []
+    for i in incidents:
+        incident_data.append({
+            'latitude': float(i['location__latitude']),
+            'longitude': float(i['location__longitude']),
+            'severity': i['severity_level'],
+            'description': i['description'],
+        })
+
+    context = {'incidents': incident_data}
+    return render(request, 'map_incident.html', context)
