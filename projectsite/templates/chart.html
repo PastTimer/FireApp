@@ -83,7 +83,7 @@
                     <div class="card-body">
                         <div class="chart-container">
                             <canvas id="multipleLineChart"></canvas>
-                        </div>>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -319,7 +319,7 @@
             });
         });
         .catch((error) => console.error("Error:", error));
-        multiBarChart
+        
         fetch("/multiBarChart/")
             .then((response) => response.json())
             .then((result) => {
@@ -355,9 +355,9 @@
                 var sortedKeys3 = sortObjectKeys(sl3_data);
                 incidentCount_moderate = sortedKeys3.map((key) => sl3_data[key]);
             }
-            var multiplebarchrt = document.getElementById("multiplebarchrt").getContext("2d");
+            var multipleBarChart = document.getElementById("multipleBarChart").getContext("2d");
 
-            new Chart(multiplebarchrt, {
+            new Chart(multipleBarChart, {
                 type: 'bar',
                 data: {
                     labels: ["Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
@@ -366,19 +366,19 @@
                             label: 'Minor Fires',
                             backgroundColor: '#90cdf4',
                             borderColor: '#90cdf4',
-                            data: incidentcounts.minor
+                            data: incidentCount.minor
                         },
                         {
                             label: 'Moderate Fires',
                             backgroundColor: '#f6ad55',
                             borderColor: '#f6ad55',
-                            data: incidentcounts.moderate
+                            data: incidentCount.moderate
                         },
                         {
                             label: 'Major Fires',
                             backgroundColor: '#fc8181',
                             borderColor: '#fc8181',
-                            data: incidentcounts.major
+                            data: incidentCount.major
                         }
                     ]
                 },

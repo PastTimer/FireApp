@@ -45,12 +45,12 @@ def PieCountbySeverity(request):
 
 def LineCountbyMonth(request):
     
-    current_year = datetime,now() .year
+    current_year = datetime.now() .year
     
     result = {month: 0 for month in range(1, 13)}
     
-    incidents_per_month = Icident.objects.filter(date_time__year=current_year) \
-        .values_list('date_time', flatTrue)
+    incidents_per_month = Incident.objects.filter(date_time__year=current_year) \
+        .values_list('date_time', flat=True)
         
     for date in incidents_per_month:
         month = date.month
