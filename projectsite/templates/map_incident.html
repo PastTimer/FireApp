@@ -66,8 +66,10 @@
         var marker = L.marker([latitude, longitude], { icon: fireIcon }).addTo(map);
 
         // Create a popup and set its content
-        var popupContent = data.severity_level + " - " + data.description;
+        var popupContent = data.severity + " - " + data.description;
         var popup = L.popup().setContent(popupContent);
+
+        //console.log(data.severity_level)
 
         marker.bindPopup(popupContent);
 

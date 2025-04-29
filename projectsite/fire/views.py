@@ -189,6 +189,7 @@ def map_incident(request):
             'severity': i['severity_level'],
             'description': i['description'],
         })
-
+    
     context = {'incidents': incident_data}
     return render(request, 'map_incident.html', context)
+
