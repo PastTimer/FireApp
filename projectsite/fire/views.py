@@ -312,3 +312,31 @@ class LocationsDeleteView(DeleteView):
     model = Locations
     template_name = "locations_delete.html"
     success_url = reverse_lazy("locations_list")
+    
+##IncidentsCRUD
+
+class IncidentsView(ListView):
+    model = Incident
+    context_object_name = "Incidents"
+    template_name = "incident_list.html"
+    paginate_by = 5
+
+
+class IncidentsCreateView(CreateView):
+    model = Incident
+    form_class = IncidentsForms
+    template_name = "incident_add.html"
+    success_url = reverse_lazy("incidents_list")
+
+
+class IncidentsUpdateView(UpdateView):
+    model = Incident
+    form_class = IncidentsForms
+    template_name = "incident_edit.html"
+    success_url = reverse_lazy("incidents_list")
+
+
+class IncidentsDeleteView(DeleteView):
+    model = Incident
+    template_name = "incident_delete.html"
+    success_url = reverse_lazy("incidents_list")
