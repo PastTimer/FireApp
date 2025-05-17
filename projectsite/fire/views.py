@@ -270,17 +270,17 @@ class FiretruckCreateView(CreateView):
     model = FireTruck
     form_class = FireTruckForm
     template_name = "firetruck_add.html"
-    success_url = reverse_lazy("firestation-list")
+    success_url = reverse_lazy("map-station_list")
 
 
 class FiretruckUpdateView(UpdateView):
     model = FireTruck
     form_class = FireTruckForm
     template_name = "firetruck_edit.html"
-    success_url = reverse_lazy("firestation-list")
+    success_url = reverse_lazy("map-station_list")
 
 
 class FiretruckDeleteView(DeleteView):
     model = FireTruck
     template_name = "firetruck_delete.html"
-    success_url = reverse_lazy("firetruck-list")
+    success_url = reverse_lazy("firetruck_list")
