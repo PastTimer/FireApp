@@ -7,6 +7,7 @@ from fire.views import FirefightersView, FirefightersCreateView, FirefightersUpd
 from fire.views import FiretruckView, FiretruckCreateView, FiretruckUpdateView, FiretruckDeleteView
 from fire.views import LocationsView, LocationsCreateView, LocationsUpdateView, LocationsDeleteView
 from fire.views import IncidentsView, IncidentsCreateView, IncidentsUpdateView, IncidentsDeleteView
+from fire.views import WeatherConditionsView, WeatherConditionsCreateView, WeatherConditionsUpdateView, WeatherConditionsDeleteView
 from fire import views
 
 urlpatterns = [
@@ -39,6 +40,10 @@ urlpatterns = [
     path("incidents_list/add", IncidentsCreateView.as_view(), name="incidents_add"),
     path("incidents_list/<pk>", IncidentsUpdateView.as_view(), name="incidents_update"),
     path("incidents_list/<pk>/delete", IncidentsDeleteView.as_view(), name="incidents_delete"),
+    path("weathercondition_list", WeatherConditionsView.as_view(), name="weathercondition_list"),
+    path("weathercondition_list/add", WeatherConditionsCreateView.as_view(), name="weathercondition_add"),
+    path("weathercondition_list/<pk>", WeatherConditionsUpdateView.as_view(), name="weathercondition_update"),
+    path("weathercondition_list/<pk>/delete", WeatherConditionsDeleteView.as_view(), name="weathercondition_delete"),
 
 ]
 

@@ -340,3 +340,31 @@ class IncidentsDeleteView(DeleteView):
     model = Incident
     template_name = "incident_delete.html"
     success_url = reverse_lazy("incidents_list")
+    
+##Weather CRUD
+
+class WeatherConditionsView(ListView):
+    model = WeatherConditions
+    context_object_name = "Weather Conditions"
+    template_name = "weathercondition_list.html"
+    paginate_by = 5
+
+
+class WeatherConditionsCreateView(CreateView):
+    model = WeatherConditions
+    form_class = WeatherConditionsForm
+    template_name = "weathercondition_add.html"
+    success_url = reverse_lazy("weathercondition_list")
+
+
+class WeatherConditionsUpdateView(UpdateView):
+    model = WeatherConditions
+    form_class = WeatherConditionsForm
+    template_name = "weathercondition_edit.html"
+    success_url = reverse_lazy("weathercondition_list")
+
+
+class WeatherConditionsDeleteView(DeleteView):
+    model = WeatherConditions
+    template_name = "weathercondition_delete.html"
+    success_url = reverse_lazy("weathercondition_list")
