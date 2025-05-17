@@ -101,26 +101,20 @@ def MultilineIncidentTop3Country(request):
         cursor.execute(query)
         rows = cursor.fetchall()
 
-    # Initialize a dictionary to store the result
     result = {}
 
-    # Initialize a set of months from January to December
     months = [str(i).zfill(2) for i in range(1, 13)]
 
-    # Loop through the query results
     for row in rows:
         country = row[0]
         month = row[1]
         total_incidents = row[2]
 
-        # If the country is not in the result dictionary, initialize it with all months set to zero
         if country not in result:
             result[country] = {month: 0 for month in months}
 
-        # Update the incident count for the corresponding month
         result[country][month] = total_incidents
 
-    # Ensure there are always 3 countries in the result
     while len(result) < 3:
         fake_country = f"Country {len(result) + 1}"
         result[fake_country] = {month: 0 for month in months}
@@ -149,7 +143,7 @@ def multipleBarBySeverity(request):
     months = set(str(i).zfill(2) for i in range(1, 13))
 
     for row in rows:
-        level = str(row[0])  # Ensure the severity level is a string
+        level = str(row[0]) 
         month = row[1]
         total_incidents = row[2]
 
@@ -158,7 +152,6 @@ def multipleBarBySeverity(request):
 
         result[level][month] = total_incidents
 
-    # Sort months within each severity level
     for level in result:
         result[level] = dict(sorted(result[level].items()))
 
@@ -178,17 +171,35 @@ def map_station(request):
      return render(request, 'map_station.html', context)
  
 def map_incident(request):
-    incidents = Incident.objects.select_related('location').values(
-        'location__latitude', 'location__longitude', 'severity_level', 'description')
-
+    incidents = Incident.objects.values(
+        'location__latitude',
+        'location__longitude',
+        'location__city',
+        'severity_level',
+        'description'
+    )
+    cities = Locations.objects.values_list('city', flat=True).distinct()
+    
     incident_data = []
     for i in incidents:
+        lat = i['location__latitude']
+        lon = i['location__longitude']
+        city = i['location__city']
+
+        if lat is None or lon is None or city is None:
+            continue 
+        
         incident_data.append({
-            'latitude': float(i['location__latitude']),
-            'longitude': float(i['location__longitude']),
+            'latitude': float(lat),
+            'longitude': float(lon),
+            'city': city,
             'severity': i['severity_level'],
             'description': i['description'],
         })
+    
+    context = {'incidents': incident_data, 'cities': cities}
+    return render(request, 'map_incident.html', context)
+
     
     context = {'incidents': incident_data}
     return render(request, 'map_incident.html', context)

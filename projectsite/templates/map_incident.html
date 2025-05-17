@@ -33,6 +33,15 @@
                 </div>
                 <div class="card-body">
                     <div class="col-md-10 ml-auto mr-auto">
+                        <div class="form-group text-center">
+                            <label for="cityFilter">Filter by City:</label>
+                            <select id="cityFilter" class="form-control" style="width: 200px; margin: 0 auto;">
+                                <option value="All">All</option>
+                                {% for city in cities %}
+                                    <option value="{{ city }}">{{ city }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div id="map" style="width: 100%; height: 400px"></div>
                     </div>
                 </div>
@@ -49,41 +58,37 @@
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>contributors'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // create an array to hold all the markers
+    var markerData = {{ incidents|safe }};
     var markers = [];
 
-    // Define the marker data
-    var markerData = {{ incidents|safe }};
+    function addMarkers(data) {
+        markers.forEach(m => map.removeLayer(m));
+        markers = [];
 
-    //Loop through the marker data and create markers
-    markerData.forEach(function (data) {
-        var latitude = parseFloat(data.latitude);
-        var longitude = parseFloat(data.longitude);
-
-        var marker = L.marker([latitude, longitude], { icon: fireIcon }).addTo(map);
-
-        // Create a popup and set its content
-        var popupContent = data.severity + " - " + data.description;
-        var popup = L.popup().setContent(popupContent);
-
-        //console.log(data.severity_level)
-
-        marker.bindPopup(popupContent);
-
-        // Bind mouseover and mouseout events to the marker
-        marker.on('mouseover', function (e) {
-            this.openPopup();
+        data.forEach(function (item) {
+            var marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)], { icon: fireIcon })
+                .bindPopup(item.severity + " - " + item.description)
+                .on('mouseover', function () { this.openPopup(); })
+                .on('mouseout', function () { this.closePopup(); })
+                .addTo(map);
+            markers.push(marker);
         });
+    }
 
-        marker.on('mouseout', function (e) {
-            this.closePopup();
-        });
+    addMarkers(markerData);
 
-        // Add the marker to the marker array
-        markers.push(marker);
+    document.getElementById('cityFilter').addEventListener('change', function () {
+        var selectedCity = this.value;
+        if (selectedCity === "All") {
+            addMarkers(markerData);
+        } else {
+            var filtered = markerData.filter(d => d.city === selectedCity);
+            addMarkers(filtered);
+        }
     });
 </script>
+
 {% endblock %}
